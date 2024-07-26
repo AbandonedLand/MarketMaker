@@ -1,6 +1,15 @@
 # MarketMaker
  Market maker is a series of scripts to help you locally run an Automated Market Maker (AMM) from your Chia Wallet.  The trading pairs that are currently setup are XCH-USDC, XCH-USDC.B, XCH-Millieth, XCH-Millieth.b.
 
+ It will take your configuration and run an AMM based on what you're wanting to accomplish.  For example, you can run a script that will put in a series of buy/sell orders for XCH_USDCb with a $0.30 spread.  It will expire the offers every so many blocks (configurable with the $config variable).  It also automatically posts the offers to dexie with an auto-claim dbx reward flag so you'll get a stream of dbx for your offers.
+
+ The currently configured trading pairs are:
+ XCH_USDC
+ XCH_USDCb
+ USDC_MilliEth
+ USDCb_MilliEthb
+
+
  ## Prerequisets
  PSSQLite is required to keep track of trades and current coin prices.
 ```powershell
@@ -10,10 +19,21 @@ Install-Module -Name PSSQLite
 
  Get [PowerShell 7.4](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4)
 
+You'll also want to set the reuse_public_key_for_change setting in the config.yaml for your chia client. 
+[Reuse Public Key](https://docs.chia.net/faq/?_highlight=reuse#how-can-i-configure-chia-to-reuse-the-same-receive-address)
 
 
 # Warnings
 Please make sure you understand what these scripts do.  They will create offers and post them automatically to dexie.  If you enter bad information, or if the coingecko API gives you bad data, then it will sell your xch for way less than you want.   There are some attempts at failsafes, but it's not a guarantee.  Please go though these scripts and verify you are comfortable with the risk before running it.
+
+# More Warnings
+This script gets around the coin locks of the default wallet by using the Validate_Only feature of the wallet RPC.  This makes it so the chia wallet doesn't actually record the offer in it's list of items.   It also uses the same coin for trades.  What does this mean??  It means that your chia wallet reporting is going to be very wrong.  Your coin history is going to be wrong.  Your Coin Amounts will be correct.  Since it never registers the offer file in the wallet, when a trade is accepted it only records 1/2 of the transaction.  The second half updates in a coin amount, but the entry doesn't get made in the client.
+
+Why is this done?  It makes it much easier to create a spread of offers.  You can assign a max percent of your total XCH/MilliEth/USDC you want to trade with and you don't have to worrie about coin splits to create your whole range of trades.  You just have to Run-Amm and it will handle the rest.  Hopefully future updates to the Chia Wallet will allow this to be done easily.
+
+Only use this if you're ok with doing some manual accounting.   The trade history is captured a sqlite database that is stored on your pc.  This is configurable in the $config settings.
+
+
 
 # Usage
 You'll want to CD into the directory for MarketMaker.
