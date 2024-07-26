@@ -34,6 +34,7 @@ $config = @{
     # Same as xch_step but for millieth
     millieth_step = 5
 
+    # This is used to help dexie register your max offer if your wallet uses the same coins for an offer.
     price_change_per_step = 0.001
 
     # This is the minimum in USDC you'll want to sell xch for.  This is a fail safe to stop trading below this number.
@@ -48,6 +49,7 @@ $config = @{
     # This is the maximum in USDC you'll want to sell Millieth for.  This is a fail safe to stop trading above this number.
     max_millieth_buy_price = 3.60
 
-
+    # Max_blocks your offer is good for. There's about 3 blocks per minute in chia.
+    max_blocks = 50
 
 }

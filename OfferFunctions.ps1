@@ -26,7 +26,7 @@ Function New-Offer{
     }
     #$offer.addTimeInMinutes(30)
 
-    $offer.setMaxHeight(((Get-BlockChainHeight).height + 50))
+    $offer.setMaxHeight(((Get-BlockChainHeight).height + ([int]$config.max_blocks)))
     $offer.validateonly()
     $offer.createoffer()
     start-sleep 1
