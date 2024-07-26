@@ -4,10 +4,17 @@
  It will take your configuration and run an AMM based on what you're wanting to accomplish.  For example, you can run a script that will put in a series of buy/sell orders for XCH_USDCb with a $0.30 spread.  It will expire the offers every so many blocks (configurable with the $config variable).  It also automatically posts the offers to dexie with an auto-claim dbx reward flag so you'll get a stream of dbx for your offers.
 
  The currently configured trading pairs are:
+ 
  XCH_USDC
+ 
  XCH_USDCb
+ 
  USDC_MilliEth
+ 
  USDCb_MilliEthb
+
+ ![image](https://github.com/user-attachments/assets/d2e0a4ee-f266-410f-87ae-590b22c8980b)
+
 
 
  ## Prerequisets
