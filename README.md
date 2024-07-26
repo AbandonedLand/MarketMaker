@@ -15,6 +15,10 @@
 
  ![image](https://github.com/user-attachments/assets/d2e0a4ee-f266-410f-87ae-590b22c8980b)
 
+# How it Works
+It uses CoinGecko's api to pull the current XCH/USD and ETH/USD price.  It then uses your configuration data to create custom spreads to buy and sell.  It expires the offer every X blocks and then posts new offers.  Look at the config_template.ps1 file to learn more of the settings.
+
+It stores the records of these offers in a seperate database and automatically posts them to Dexie in a way that it will auto-claim the DBX once the trades expire or gets accepted.  You can even use Pushover to get alerts when trades are accepted if you want.
 
 
  ## Prerequisets
