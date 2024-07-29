@@ -232,6 +232,7 @@ Class ChiaOffer{
                     "offer"=($this.offer)
                     "fee"=$this.fee
                     "validate_only"=$this.validate_only
+                    "reuse_puzhash"=$true
                     "driver_dict"=$this.requested_nft_data
                     "max_time"=$this.max_time
                 } | convertto-json -Depth 11)        
@@ -241,6 +242,7 @@ Class ChiaOffer{
                     "offer"=($this.offer)
                     "fee"=$this.fee
                     "validate_only"=$this.validate_only
+                    "reuse_puzhash"=$true
                     "driver_dict"=$this.requested_nft_data
                     "max_height"=$this.max_height
                 } | convertto-json -Depth 11)        
@@ -250,6 +252,7 @@ Class ChiaOffer{
                     "offer"=($this.offer)
                     "fee"=$this.fee
                     "validate_only"=$this.validate_only
+                    "reuse_puzhash"=$true
                     "driver_dict"=$this.requested_nft_data
                 } | convertto-json -Depth 11)     
         } 
