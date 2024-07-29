@@ -2,6 +2,8 @@ $config = @{
     # Database Location and Filename
     database = 'c:\chiaDB\trades.SQLite'
 
+    xch_address = 'Your XCH Address'
+
     # Pushover notifications settings
     use_pushover = $false
     pushover_token = 'Api_secret'
@@ -51,5 +53,12 @@ $config = @{
 
     # Max_blocks your offer is good for. There's about 3 blocks per minute in chia.
     max_blocks = 50
+
+
+    # Max amount of DBX to hold.
+    dbx_max_exposure = 5000
+    min_dbx_to_xch_buy_price = 1000
+    max_dbx_to_xch_sell_price = 700
+
 
 }

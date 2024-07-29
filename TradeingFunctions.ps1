@@ -64,10 +64,12 @@ Function Buy-XCHinBulk{
         [Parameter(mandatory=$true)]
         [decimal]$step_size,
         [Parameter(mandatory=$true)]
-        [int]$max_percent_of_offered_coin
+        [int]$max_percent_of_offered_coin,
+        [Parameter(mandatory=$true)]
+        $wallets
     )
 
-    $wallets = Get-WalletBalances
+    
     if($chain -eq 'Base'){
         $max = round(($wallets.wUSDC.Base * ($max_percent_of_offered_coin /100)))
     }
@@ -109,10 +111,12 @@ Function Sell-XCHinBulk{
         [Parameter(mandatory=$true)]
         [decimal]$step_size,
         [Parameter(mandatory=$true)]
-        [int]$max_percent_of_offered_coin
+        [int]$max_percent_of_offered_coin,
+        [Parameter(mandatory=$true)]
+        $wallets
     )
 
-    $wallets = Get-WalletBalances
+    
     if($chain -eq 'Base'){
         $max = round(($wallets.XCH * ($max_percent_of_offered_coin /100)))
     }
@@ -198,10 +202,12 @@ Function Sell-MilliETHinBulk{
         [Parameter(mandatory=$true)]
         [decimal]$step_size,
         [Parameter(mandatory=$true)]
-        [int]$max_percent_of_offered_coin
+        [int]$max_percent_of_offered_coin,
+        [Parameter(mandatory=$true)]
+        $wallets
     )
 
-    $wallets = Get-WalletBalances
+
     if($chain -eq 'Base'){
         $max = round(($wallets.wmilliETH.Base * ($max_percent_of_offered_coin /100)))
     }
@@ -241,10 +247,12 @@ Function Buy-MilliETHinBulk{
         [Parameter(mandatory=$true)]
         [decimal]$step_size,
         [Parameter(mandatory=$true)]
-        [int]$max_percent_of_offered_coin
+        [int]$max_percent_of_offered_coin,
+        [Parameter(mandatory=$true)]
+        $wallets
     )
 
-    $wallets = Get-WalletBalances
+    
     if($chain -eq 'Base'){
         $max = round(($wallets.wUSDC.Base * ($max_percent_of_offered_coin /100)))
     }
@@ -324,7 +332,58 @@ Function Buy-MilliEth{
 #
 
 
+# Buy up to max
+Function Buy-DBX{
+    param(
+        [Parameter(mandatory=$true)]
+        $wallets
+    )
 
+
+    #Figure out how much to buy to buy up to the max.
+    $amount = [decimal]$config.dbx_max_exposure - [decimal]$wallets.DBX
+
+    # check to see if anything should be purchased with a minimum of 20
+    if($amount -gt 20){
+        $dbx_per_xch = (Get-DBXPrice).buy
+
+        $price = [System.Math]::round($amount / $dbx_per_xch ,3)
+        if($price -ge $config.max_dbx_to_xch_sell_price -AND $price -lt $config.min_dbx_to_xch_buy_price){
+            $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin DBX -requested_amount $amount")
+            start-job -InitializationScript $function -ScriptBlock $scriptblock
+        }
+        
+    }
+
+    
+
+}
+
+Function Sell-DBX{
+    param(
+        [Parameter(mandatory=$true)]
+        $wallets
+    )
+
+
+    #Figure out how much to sell
+    $amount = [decimal]$wallets.DBX
+
+    # check to see if anything should be purchased with a minimum of 20
+    if($amount -gt 20){
+        $dbx_per_xch = (Get-DBXPrice).sell
+        $price = [System.Math]::round($amount / $dbx_per_xch ,3)
+        if($price -ge $config.max_dbx_to_xch_sell_price -AND $price -lt $config.min_dbx_to_xch_buy_price){
+
+
+            $scriptblock = [scriptblock]::create("New-Offer -offered_coin DBX -offered_amount $amount -requested_coin XCH -requested_amount $price")
+            start-job -InitializationScript $function -ScriptBlock $scriptblock
+        }
+    }
+
+   
+
+}
 
 
 

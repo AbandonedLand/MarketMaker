@@ -2,12 +2,12 @@ Function New-Offer{
     param(
         [CmdletBinding()]
         [Parameter(mandatory=$true)]
-        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b")]
+        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX")]
         [string]$offered_coin,
         [Parameter(mandatory=$true)]
         [decimal]$offered_amount,
         [Parameter(mandatory=$true)]
-        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b")]
+        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX")]
         [string]$requested_coin,
         [Parameter(mandatory=$true)]
         [decimal]$requested_amount
@@ -71,7 +71,7 @@ Function Send-Cat{
         wallet_id = $wallet_id
         fee = 0
         amount = [int64]($amount*1000)
-        inner_address = 'xch1gjh6ehqk9m0mvyx4knt3j0zx09nllmech2jeq7cv2lsqgzdh2mnqc5zk2t'
+        inner_address = ($config.xch_address)
     } | ConvertTo-Json
 
     chia rpc wallet cat_spend $json | ConvertFrom-Json
@@ -109,7 +109,7 @@ Function Reset-Offers  {
             wallet_id = 1
             fee = 0
             amount = ([int64]([decimal]$wallets.XCH * 1000000000000))
-            address = 'xch1gjh6ehqk9m0mvyx4knt3j0zx09nllmech2jeq7cv2lsqgzdh2mnqc5zk2t'
+            address = ($config.xch_address)
         } | ConvertTo-Json
     chia rpc wallet send_transaction $json | ConvertFrom-Json
             

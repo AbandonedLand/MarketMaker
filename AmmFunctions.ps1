@@ -1,5 +1,6 @@
 Function Start-AMM {
 
+    $wallets = Get-WalletBalances
     
     Check-OfferStatus
 
@@ -28,11 +29,11 @@ Function Start-AMM {
         if($xch_buy_price -lt ([decimal]$config.max_xch_buy_price)){
             # Check if bot is trading the XCH_USDCB Pair
             if([Boolean]$config.trading_pair_xch_usdcb){
-                Buy-XCHinBulk -chain Base -starting_price $xch_buy_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Buy-XCHinBulk -chain Base -starting_price $xch_buy_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
             # Check if bot is trading the XCH_USDC Pair
             if([Boolean]$config.trading_pair_xch_usdc){
-                Buy-XCHinBulk -chain Etherium -starting_price $xch_buy_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Buy-XCHinBulk -chain Etherium -starting_price $xch_buy_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
         } 
         
@@ -41,11 +42,11 @@ Function Start-AMM {
         if($xch_sell_price -gt ([decimal]$config.min_xch_sell_price)){
             # Check if bot is trading the XCH_USDCB Pair
             if([Boolean]$config.trading_pair_xch_usdcb){
-                Sell-XCHinBulk -chain Base -starting_price $xch_sell_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Sell-XCHinBulk -chain Base -starting_price $xch_sell_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
             # Check if bot is trading the XCH_USDC Pair
             if([Boolean]$config.trading_pair_xch_usdc){
-                Sell-XCHinBulk -chain Etherium -starting_price $xch_sell_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Sell-XCHinBulk -chain Etherium -starting_price $xch_sell_price -step_size ([decimal]$config.xch_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
         } 
     
@@ -54,11 +55,11 @@ Function Start-AMM {
         if($millieth_buy_price -lt [decimal]$config.max_millieth_buy_price){
             # Check if bot is trading the MilliEthB USDCB Pair
             if([Boolean]$config.trading_pair_usdcb_milliethb){
-                Buy-MilliETHinBulk -chain Base -starting_price $millieth_buy_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Buy-MilliETHinBulk -chain Base -starting_price $millieth_buy_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
             # Check if bot is trading the MilliEth USDC Pair
             if([Boolean]$config.trading_pair_usdc_millieth){
-                Buy-MilliETHinBulk -chain Etherium -starting_price $millieth_buy_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step)
+                Buy-MilliETHinBulk -chain Etherium -starting_price $millieth_buy_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step) -wallets $wallets
             }
 
         }
@@ -67,11 +68,11 @@ Function Start-AMM {
         if($millieth_sell_price -gt [decimal]$config.min_millieth_sell_price){
             # Check if bot is trading the MilliEthB USDCB Pair
             if([Boolean]$config.trading_pair_usdcb_milliethb){
-                Sell-MilliETHinBulk -chain Base -starting_price $millieth_sell_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step )     
+                Sell-MilliETHinBulk -chain Base -starting_price $millieth_sell_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step ) -wallets $wallets  
             }
             # Check if bot is trading the MilliEth USDC Pair
             if([Boolean]$config.trading_pair_usdc_millieth){
-                Sell-MilliETHinBulk -chain Etherium -starting_price $millieth_sell_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step )     
+                Sell-MilliETHinBulk -chain Etherium -starting_price $millieth_sell_price -step_size ([decimal]$config.millieth_step) -max_percent_of_offered_coin ([decimal]$config.percent) -price_change_per_step ([decimal]$config.price_change_per_step ) -wallets $wallets
             }
 
         }

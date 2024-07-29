@@ -156,3 +156,38 @@ Function Show-TradeDisplay {
     return $table | Sort-Object {$_.Trade_value} -Descending  | Select-Object -First 10 | Format-Table
 
 }
+
+
+Function Get-DexiePairData{
+    param(
+        # formated as CAT_XCH
+        $ticker_id
+    )
+    # Dexie ticker data uri
+    $uri = -join("https://api.dexie.space/v2/prices/tickers?ticker_id=",$ticker_id)
+    $data = Invoke-RestMethod -Method Get -Uri $uri
+
+
+    $data.tickers[0]
+
+}
+
+Function Get-DBXPrice{
+    $price = @{
+        buy = 0
+        sell = 0
+    }
+
+    $data = Get-DexiePairData -ticker_id DBX_XCH
+    
+    $bid = [Math]::round(1/$data.bid,3)
+    $ask = [Math]::round(1/$data.ask,3)
+    $mid = [Math]::round(1/$data.current_avg_price,3)
+
+    $delta = ($bid - $ask) / 3
+
+    $price.sell = $mid - $delta
+    $price.buy = $mid + $delta
+
+    $price
+}

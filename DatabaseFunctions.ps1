@@ -42,6 +42,8 @@ Function Get-CoinPriceRecord {
 }
 
 Function Set-CoinPriceRecord(){
+    
+
     $xch_uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=chia'
     $eth_uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum'
     $eth_data = (Invoke-RestMethod -Method Get -Uri $eth_uri)[0]

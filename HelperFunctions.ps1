@@ -15,11 +15,14 @@ Function Get-WalletBalances{
         }
         XCH = [decimal]0
         
+        DBX = [decimal]0
+        
         wallet_ids = @{
             wusdcb = ($list | Where-Object {$_.name -eq 'wUSDC.b'}).id
             wusdc = ($list | Where-Object {$_.name -eq 'wUSDC'}).id
             wmillieth = ($list | Where-Object {$_.name -eq 'wmilliETH'}).id
             wmilliethb = ($list | Where-Object {$_.name -eq 'wmilliETH.b'}).id
+            dbx = ($list | Where-Object {$_.name -eq 'DBX'}).id
             xch = 1
         }
     }
@@ -53,6 +56,12 @@ Function Get-WalletBalances{
     } | ConvertTo-Json
     
     $wallets.XCH = (((chia rpc wallet get_wallet_balance $json | ConvertFrom-Json).wallet_balance).max_send_amount / 1000000000000)
+
+    $json = @{
+        wallet_id = ($list | Where-Object {$_.name -eq 'DBX'}).id 
+    } | ConvertTo-Json
+
+    $wallets.DBX = (((chia rpc wallet get_wallet_balance $json | ConvertFrom-Json).wallet_balance).max_send_amount / 1000)
     return $wallets
 }
 
@@ -152,7 +161,7 @@ Function Check-Offers{
     $height = (Invoke-RestMethod -Uri $uri -Method Post -body (@{'network'='mainnet'} | convertto-json) -ContentType 'application/json').blockchain_state.peak.height
 
 
-    $Query = "Select * from TRADES where expired_block < @height and status = 'Active'"
+    $Query = "Select * from TRADES where expired_block <= @height and status = 'Active'"
     $expired =  (Invoke-SqliteQuery -Database (Get-DatabaseConfig).database -Query $Query -SqlParameters @{
         height = $height
     }).count
