@@ -1,5 +1,5 @@
 # Create Config file if it doesn't exist.
-if(!(Test-Path -Path ./config.ps1)){
+if(!(Test-Path -Path ./Config.ps1)){
     Copy-Item -Path ./Config_Template.ps1 -Destination ./Config.ps1
 }
 
