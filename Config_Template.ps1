@@ -3,7 +3,7 @@ $config = @{
     database = 'c:\chiaDB\trades.SQLite'
 
     # Pushover notifications settings
-    use_pushover = $true
+    use_pushover = $false
     pushover_token = 'Api_secret'
     pushover_name = 'api_user_name'
     

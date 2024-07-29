@@ -34,6 +34,18 @@ You'll also want to set the reuse_public_key_for_change setting in the config.ya
 [Reuse Public Key](https://docs.chia.net/faq/?_highlight=reuse#how-can-i-configure-chia-to-reuse-the-same-receive-address)
 
 
+You will also need to run the command:
+
+```powershell
+Rename-Cats
+```
+
+This will give your wallet the names used by this application.  The names are wUSDC, wUSDC.b, wmilliETH, wmilliETH.b, DBX  These names are needed for the trading functions to work correctly.
+
+
+
+
+
 # Warnings
 Please make sure you understand what these scripts do.  They will create offers and post them automatically to dexie.  If you enter bad information, or if the coingecko API gives you bad data, then it will sell your xch for way less than you want.   There are some attempts at failsafes, but it's not a guarantee.  Please go though these scripts and verify you are comfortable with the risk before running it.
 

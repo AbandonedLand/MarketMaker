@@ -109,6 +109,15 @@ Function Get-WalletSnapShot {
     
 }
 
+
+Function Rename-Cats{
+    chia wallet add_token -id 4cb15a8ecc85068fb1f98c09a5e489d1ad61b2af79690ce00f9fc4803c8b597f -n wmilliETH
+    chia wallet add_token -id f322a205c034fe28681829fa5a2e483ac421f0952eb1292945c8db06e0a471a6 -n wmilliETH.b
+    chia wallet add_token -id bbb51b246fbec1da1305be31dcf17151ccd0b8231a1ec306d7ce9f5b8c742b9e -n wUSDC
+    chia wallet add_token -id fa4a180ac326e67ea289b869e3448256f6af05721f7cf934cb9901baa6b7a99d -n wUSDC.b
+    chia wallet add_token -id db1a9020d48d9d4ad22631b66ab4b9ebd3637ef7758ad38881348c5d24c38f20 -n DBX
+}
+
 Function Get-LastOffers {
     $json = [ordered]@{
         start = [int]0
