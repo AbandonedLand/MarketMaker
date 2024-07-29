@@ -348,7 +348,7 @@ Function Buy-DBX{
         $dbx_per_xch = (Get-DBXPrice).buy
 
         $price = [System.Math]::round($amount / $dbx_per_xch ,3)
-        if($price -ge $config.max_dbx_to_xch_sell_price -AND $price -lt $config.min_dbx_to_xch_buy_price){
+        if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
             $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin DBX -requested_amount $amount")
             start-job -InitializationScript $function -ScriptBlock $scriptblock
         }
@@ -373,7 +373,7 @@ Function Sell-DBX{
     if($amount -gt 20){
         $dbx_per_xch = (Get-DBXPrice).sell
         $price = [System.Math]::round($amount / $dbx_per_xch ,3)
-        if($price -ge $config.max_dbx_to_xch_sell_price -AND $price -lt $config.min_dbx_to_xch_buy_price){
+        if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
 
 
             $scriptblock = [scriptblock]::create("New-Offer -offered_coin DBX -offered_amount $amount -requested_coin XCH -requested_amount $price")
