@@ -3,6 +3,8 @@ Function Start-AMM {
     
     Check-OfferStatus
 
+    # get pricing for wallet
+    Set-WalletSnapShot
 
     # Spread is the difference between buy and sell from the current exchange price.
     
