@@ -22,7 +22,7 @@ Function Start-AMM {
     if($price.xch -gt 0 -AND $price.millieth -gt 0){
 
         [decimal]$xch_buy_price = $price.xch - ([decimal]$config.xch_spread)
-        [decimal]$xch_sell_price = $price.xch + ([decimal]$config.xch_spread)
+        [decimal]$xch_sell_price = $price.xch + ([decimal]$config.xch_spread) + ([decimal]$config.xch_extra_sale_adjustment)
         [decimal]$millieth_buy_price = $price.millieth - ([decimal]$config.millieth_spread)
         [decimal]$millieth_sell_price = $price.millieth + ([decimal]$config.millieth_spread)
     

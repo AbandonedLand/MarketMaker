@@ -24,6 +24,7 @@ $config = @{
     # The xch_spread is the amount in USDC you wish to add to your sell offers or subtract from your buy offers.   
     # Example: If the current XCH price from coingecko is $20 and you have a 0.2 xch_spread, you will create a sell offer for $20.20 per xch and a buy offer of $19.80 per xch.
     xch_spread = 0.2
+    xch_extra_sale_adjustment = 0
 
     # Same as xch_spread, but for millieth offers.
     millieth_spread = 0.05
@@ -59,6 +60,8 @@ $config = @{
     dbx_max_exposure = 5000
     min_dbx_to_xch_buy_price = 1000
     max_dbx_to_xch_sell_price = 700
+
+
 
 
 }
