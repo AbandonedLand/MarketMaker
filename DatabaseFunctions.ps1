@@ -48,17 +48,21 @@ Function Set-CoinPriceRecord(){
     $eth_uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum'
     $eth_data = (Invoke-RestMethod -Method Get -Uri $eth_uri)[0]
     $xch_data = (Invoke-RestMethod -Method Get -Uri $xch_uri)[0]
+    $dbx_usd = (Get-DBXPrice).bid * $xch_data.current_price
     $millieth_usd = $eth_data.current_price / 1000
     $xch_usd = $xch_data.current_price
-    $Query = "INSERT INTO COINPRICE (xch,millieth,created_at) VALUES (@xch,@millieth,@created_at)"
+    $Query = "INSERT INTO COINPRICE (xch,millieth,dbx,created_at) VALUES (@xch,@millieth,@dbx,@created_at)"
     $sqlparam = [ordered]@{
         millieth = $millieth_usd
         xch = $xch_usd
+        dbx = $dbx_usd
         created_at = (Get-Date)
     }
     Invoke-SqliteQuery -DataSource (Get-DatabaseConfig).database -Query $Query -SqlParameters $sqlparam
 
 }
+
+
 
 Function Set-WalletSnapShot{
     $sqlparam = Get-WalletSnapShot
@@ -79,3 +83,13 @@ Function Create-XCHTradeLogDatabase{
 Function Get-DatabaseConfig{
     return $config
 }
+
+Function Update-DBForDBXTracking{
+    $coinprice_query = "ALTER TABLE COINPRICE ADD dbx DECIMAL(20,17) AFTER millieth"
+
+    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3), DBX_value DECIMAL(10,3) AFTER milliETH_value"
+    Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
+    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
+
+}
+

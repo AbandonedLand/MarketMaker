@@ -111,6 +111,8 @@ Function Get-WalletSnapShot {
         wUSD_value = ($wallets.wUSDC.Base + $wallets.wUSDC.Etherium)
         milliETH_amount = ($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)
         milliETH_value = ([System.Math]::Round((($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)*$coin_prices.millieth),2))
+        DBX_amount = ([System.Math]::Round($wallets.DBX,3))
+        DBX_value = ([System.Math]::Round(($wallets.DBX * $coin_prices.dbx),2))
         total_value = ([System.Math]::Round([System.Math]::Round((($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)*$coin_prices.millieth),2)+($wallets.wUSDC.Base + $wallets.wUSDC.Etherium)+([System.Math]::Round(($wallets.XCH * $coin_prices.xch),2)),2))
         snapshot_time = (Get-Date)
     }
