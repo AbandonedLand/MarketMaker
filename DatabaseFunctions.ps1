@@ -66,7 +66,7 @@ Function Set-CoinPriceRecord(){
 
 Function Set-WalletSnapShot{
     $sqlparam = Get-WalletSnapShot
-    $Query = "INSERT INTO WALLET (xch_amount, xch_value, wUSD_amount, wUSD_value, milliETH_amount, milliETH_value, total_value, snapshot_time) VALUES (@xch_amount, @xch_value, @wUSD_amount, @wUSD_value, @milliETH_amount, @milliETH_value, @total_value, @snapshot_time)"
+    $Query = "INSERT INTO WALLET (xch_amount, xch_value, wUSD_amount, wUSD_value, milliETH_amount, milliETH_value, DBX_amount, DBX_value, total_value, snapshot_time) VALUES (@xch_amount, @xch_value, @wUSD_amount, @wUSD_value, @milliETH_amount, @milliETH_value, @DBX_amount, @DBX_value, @total_value, @snapshot_time)"
     Invoke-SqliteQuery -DataSource (Get-DatabaseConfig).database -Query $Query -SqlParameters $sqlparam
 }
 
@@ -87,7 +87,9 @@ Function Get-DatabaseConfig{
 Function Update-DBForDBXTracking{
     $coinprice_query = "ALTER TABLE COINPRICE ADD dbx DECIMAL(20,17)"
 
-    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3), DBX_value DECIMAL(10,3)"
+    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3)"
+    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
+    $wallet_query = "ALTER TABLE WALLET ADD DBX_value DECIMAL(10,3)"
     Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
     Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
 
