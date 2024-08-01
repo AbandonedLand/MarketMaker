@@ -1,5 +1,5 @@
 Function New-TradeReport {
-    $result = Get-CompletedOffers
+    $result = Get-CompletedOffers | Where-Object {$_.requested_coin -eq 'wUSDC.b' -or $_.offered_coin -eq 'wUSDC.b' -or $_.requested_coin -eq 'wUSDC' -or $_.offered_coin -eq 'wUSDC'}
 
     $sold_amount = (($result | Where-Object {$_.offered_coin -eq 'XCH'}).offered_amount | Measure-Object -Sum).Sum
     $sold_value = (($result | Where-Object {$_.offered_coin -eq 'XCH'}).requested_amount | Measure-Object -Sum).Sum
