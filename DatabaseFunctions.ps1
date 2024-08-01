@@ -85,9 +85,9 @@ Function Get-DatabaseConfig{
 }
 
 Function Update-DBForDBXTracking{
-    $coinprice_query = "ALTER TABLE COINPRICE ADD dbx DECIMAL(20,17) AFTER millieth"
+    $coinprice_query = "ALTER TABLE COINPRICE ADD dbx DECIMAL(20,17)"
 
-    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3), DBX_value DECIMAL(10,3) AFTER milliETH_value"
+    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3), DBX_value DECIMAL(10,3)"
     Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
     Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
 
