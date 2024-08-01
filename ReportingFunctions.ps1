@@ -76,6 +76,11 @@ Function Get-DexieMarket(){
 
 }
 
+Function Show-WalletBalanceHistory {
+    $Query = "Select * from WALLET"
+    Invoke-sqliteQuery -Query $Query -Database (Get-DatabaseConfig).database | Format-Table
+}
+
 
 Function Convert-CodeToUSD($code,$amount){
     [decimal]$code_usd_value = 0
