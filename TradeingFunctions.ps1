@@ -367,14 +367,18 @@ Function Sell-DBX{
 
 
     #Figure out how much to sell
-    $amount = [decimal]$wallets.DBX
+    if([decimal]$wallets.DBX -gt 5000){
+        $amount = 5000
+    } else {
+        $amount = [decimal]$wallets.DBX
+    }
+    
 
     # check to see if anything should be purchased with a minimum of 20
     if($amount -gt 20){
         $dbx_per_xch = (Get-DBXPrice).sell
         $price = [System.Math]::round($amount / $dbx_per_xch ,3)
         if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
-
 
             $scriptblock = [scriptblock]::create("New-Offer -offered_coin DBX -offered_amount $amount -requested_coin XCH -requested_amount $price")
             start-job -InitializationScript $function -ScriptBlock $scriptblock
