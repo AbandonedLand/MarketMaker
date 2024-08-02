@@ -120,9 +120,20 @@ Function Start-AMM {
             Buy-DBX -wallets $wallets
         }
 
+        $check = ($active | Where-Object {$_.offered_coin -eq 'XCH' -AND $_.requested_coin -eq 'HOA'})
+
+        if($check.count -eq 0){
+            Buy-HOA -wallets $wallets
+        }
+
         $check = ($active | Where-Object {$_.offered_coin -eq 'DBX' -AND $_.requested_coin -eq 'XCH'})
         if($check.count -eq 0){
             Sell-DBX -wallets $wallets
+        }
+
+        $check = ($active | Where-Object {$_.offered_coin -eq 'HOA' -AND $_.requested_coin -eq 'XCH'})
+        if($check.count -eq 0){
+            Sell-HOA -wallets $wallets
         }
 
     }

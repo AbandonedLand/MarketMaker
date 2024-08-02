@@ -15,6 +15,32 @@ $config = @{
     trading_pair_usdc_millieth = $true
     trading_pair_usdcb_milliethb = $true
 
+
+
+    # Preperation for large update
+    traded_pairs = @{
+        usdc = $true
+        usdcb = $true
+        sbx = $false
+        dbx = $true
+        hoa = $true
+    }
+
+    
+    trading_targets = @{
+        DBX = @{
+            min_hold = 5000
+            max_hold = 10000
+        }
+        HOA = @{
+            min_hold = 45000
+            max_hold = 90000
+        }
+
+    }
+
+
+
     # Trading Config
 
     # Percent is the maximun percent of funds you wish to trade with at a time.  
@@ -60,6 +86,10 @@ $config = @{
     dbx_max_exposure = 5000
     min_dbx_to_xch_buy_price = 1000
     max_dbx_to_xch_sell_price = 700
+
+    hoa_max_exposure = 45000
+    min_hoa_to_xch_buy_price = 6325
+    max_hoa_to_xch_sell_price = 4100
 
 
 

@@ -342,10 +342,10 @@ Function Buy-DBX{
 
     #Figure out how much to buy to buy up to the max.
     $amount = [decimal]$config.dbx_max_exposure - [decimal]$wallets.DBX
-
+ 
     # check to see if anything should be purchased with a minimum of 20
-    if($amount -gt 20){
-        $dbx_per_xch = (Get-DBXPrice).buy
+    if($amount -gt 0){
+        $dbx_per_xch = (Get-CATPrice -cat DBX).buy
 
         $price = [System.Math]::round($amount / $dbx_per_xch ,3)
         if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
@@ -353,7 +353,26 @@ Function Buy-DBX{
             start-job -InitializationScript $function -ScriptBlock $scriptblock
         }
         
+    } else{
+        
+        $amount = ([decimal]$config.dbx_max_exposure * 2) - [decimal]$wallets.DBX
+
+        if($amount -gt 0){
+
+            #get the tibet quick sale price
+            
+    
+            $price = ([Math]::Round((Sell-Token -cat dbx -amount $amount).amount_out,3)-0.005)
+
+            $dbx_per_xch = (1/($price / $amount))
+            if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
+                $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin DBX -requested_amount $amount")
+                start-job -InitializationScript $function -ScriptBlock $scriptblock
+            }
+        }
     }
+
+    
 
     
 
@@ -376,7 +395,7 @@ Function Sell-DBX{
 
     # check to see if anything should be purchased with a minimum of 20
     if($amount -gt 20){
-        $dbx_per_xch = (Get-DBXPrice).sell
+        $dbx_per_xch = (Get-CATPrice -cat DBX).sell
         $price = [System.Math]::round($amount / $dbx_per_xch ,3)
         if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
 
@@ -388,6 +407,82 @@ Function Sell-DBX{
    
 
 }
+
+
+# Buy up to max
+Function Buy-HOA{
+    param(
+        [Parameter(mandatory=$true)]
+        $wallets
+    )
+
+
+    #Figure out how much to buy to buy up to the max.
+    $amount = [decimal]$config.hoa_max_exposure - [decimal]$wallets.HOA
+
+    # check to see if anything should be purchased with a minimum of 20
+    if($amount -gt 20){
+        $hoa_per_xch = (Get-CATPrice -cat HOA).buy
+
+        $price = [System.Math]::round($amount / $hoa_per_xch ,3)
+        if($hoa_per_xch -ge $config.max_hoa_to_xch_sell_price -AND $hoa_per_xch -lt $config.min_hoa_to_xch_buy_price){
+            $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin HOA -requested_amount $amount")
+            start-job -InitializationScript $function -ScriptBlock $scriptblock
+        }
+        
+    } else{
+        
+        $amount = ([decimal]$config.hoa_max_exposure * 2) - [decimal]$wallets.HOA
+
+
+        if($amount -gt 0){
+
+            #get the tibet quick sale price
+            
+    
+            $price = ([Math]::Round((Sell-Token -cat hoa -amount $amount).amount_out,3)-0.005)
+
+            $hoa_per_xch = (1/($price / $amount))
+            if($hoa_per_xch -ge $config.max_hoa_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_hoa_to_xch_buy_price){
+                $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin HOA -requested_amount $amount")
+                start-job -InitializationScript $function -ScriptBlock $scriptblock
+            }
+        }
+    }
+
+
+}
+
+Function Sell-HOA{
+    param(
+        [Parameter(mandatory=$true)]
+        $wallets
+    )
+
+
+    #Figure out how much to sell
+    if([decimal]$wallets.HOA -gt 5000){
+        $amount = 5000
+    } else {
+        $amount = [decimal]$wallets.HOA
+    }
+    
+
+    # check to see if anything should be purchased with a minimum of 20
+    if($amount -gt 20){
+        $hoa_per_xch = (Get-CATPrice -cat HOA).sell
+        $price = [System.Math]::round($amount / $hoa_per_xch ,3)
+        if($hoa_per_xch -ge $config.max_hoa_to_xch_sell_price -AND $hoa_per_xch -lt $config.min_hoa_to_xch_buy_price){
+
+            $scriptblock = [scriptblock]::create("New-Offer -offered_coin HOA -offered_amount $amount -requested_coin XCH -requested_amount $price")
+            start-job -InitializationScript $function -ScriptBlock $scriptblock
+        }
+    }
+
+   
+
+}
+
 
 
 

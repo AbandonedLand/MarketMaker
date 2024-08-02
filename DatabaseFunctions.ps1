@@ -1,3 +1,14 @@
+Function Create-DatabaseTable{
+    param(
+        [string]$name,
+        [hashtable]$columns
+    )
+
+
+    
+}
+
+
 Function Get-CompletedOffers{
     $Query = "Select * from TRADES where status = 'Completed'"
     return Invoke-SqliteQuery -Query $Query -DataSource (Get-DatabaseConfig).database
@@ -48,14 +59,16 @@ Function Set-CoinPriceRecord(){
     $eth_uri = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=ethereum'
     $eth_data = (Invoke-RestMethod -Method Get -Uri $eth_uri)[0]
     $xch_data = (Invoke-RestMethod -Method Get -Uri $xch_uri)[0]
-    $dbx_usd = (Get-DBXPrice).bid * $xch_data.current_price
+    $dbx_usd = (Get-CATPrice -cat DBX).bid * $xch_data.current_price
+    $hoa_usd = (Get-CATPrice -cat HOA).bid * $xch_data.current_price
     $millieth_usd = $eth_data.current_price / 1000
     $xch_usd = $xch_data.current_price
-    $Query = "INSERT INTO COINPRICE (xch,millieth,dbx,created_at) VALUES (@xch,@millieth,@dbx,@created_at)"
+    $Query = "INSERT INTO COINPRICE (xch,millieth,dbx,hoa,created_at) VALUES (@xch,@millieth,@dbx,@hoa,@created_at)"
     $sqlparam = [ordered]@{
         millieth = $millieth_usd
         xch = $xch_usd
         dbx = $dbx_usd
+        hoa = $hoa_usd
         created_at = (Get-Date)
     }
     Invoke-SqliteQuery -DataSource (Get-DatabaseConfig).database -Query $Query -SqlParameters $sqlparam
@@ -66,7 +79,7 @@ Function Set-CoinPriceRecord(){
 
 Function Set-WalletSnapShot{
     $sqlparam = Get-WalletSnapShot
-    $Query = "INSERT INTO WALLET (xch_amount, xch_value, wUSD_amount, wUSD_value, milliETH_amount, milliETH_value, DBX_amount, DBX_value, total_value, snapshot_time) VALUES (@xch_amount, @xch_value, @wUSD_amount, @wUSD_value, @milliETH_amount, @milliETH_value, @DBX_amount, @DBX_value, @total_value, @snapshot_time)"
+    $Query = "INSERT INTO WALLET (xch_amount, xch_value, wUSD_amount, wUSD_value, milliETH_amount, milliETH_value, DBX_amount, DBX_value, HOA_amount, HOA_value, total_value, snapshot_time) VALUES (@xch_amount, @xch_value, @wUSD_amount, @wUSD_value, @milliETH_amount, @milliETH_value, @DBX_amount, @DBX_value, @HOA_amount,@HOA_value, @total_value, @snapshot_time)"
     Invoke-SqliteQuery -DataSource (Get-DatabaseConfig).database -Query $Query -SqlParameters $sqlparam
 }
 
@@ -94,4 +107,29 @@ Function Update-DBForDBXTracking{
     Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
 
 }
+
+Function Update-DBForHOATracking{
+    $coinprice_query = "ALTER TABLE COINPRICE ADD hoa DECIMAL(20,17)"
+    Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
+    $wallet_query = "ALTER TABLE WALLET ADD HOA_amount DECIMAL(10,3)"
+    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
+    $wallet_query = "ALTER TABLE WALLET ADD HOA_value DECIMAL(10,3)"
+    
+    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
+
+}
+
+
+Function New-AMMDatabase{
+    <#  
+        .SYNOPSIS
+        Creates a new database file for the AMM
+
+        .DESCRIPTION
+
+        
+    #>
+}
+
+
 

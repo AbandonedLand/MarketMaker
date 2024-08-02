@@ -16,6 +16,8 @@ Function Get-WalletBalances{
         XCH = [decimal]0
         
         DBX = [decimal]0
+
+        HOA = [decimal]0
         
         wallet_ids = @{
             wusdcb = ($list | Where-Object {$_.name -eq 'wUSDC.b'}).id
@@ -23,6 +25,7 @@ Function Get-WalletBalances{
             wmillieth = ($list | Where-Object {$_.name -eq 'wmilliETH'}).id
             wmilliethb = ($list | Where-Object {$_.name -eq 'wmilliETH.b'}).id
             dbx = ($list | Where-Object {$_.name -eq 'DBX'}).id
+            hoa = ($list | Where-Object {$_.name -eq 'HOA'}).id
             xch = 1
         }
     }
@@ -62,6 +65,12 @@ Function Get-WalletBalances{
     } | ConvertTo-Json
 
     $wallets.DBX = (((chia rpc wallet get_wallet_balance $json | ConvertFrom-Json).wallet_balance).max_send_amount / 1000)
+
+    $json = @{
+        wallet_id = ($list | Where-Object {$_.name -eq 'HOA'}).id 
+    } | ConvertTo-Json
+
+    $wallets.HOA = (((chia rpc wallet get_wallet_balance $json | ConvertFrom-Json).wallet_balance).max_send_amount / 1000)
     return $wallets
 }
 
@@ -182,6 +191,14 @@ Function Check-Offers{
 }
 
 
+Get-WalletHeight{
+    $height = (chia rpc wallet get_height_info | ConvertFrom-Json)
+    if($height){
+        return $height.height
+    } else {
+        return (Get-BlockChainHeight).height
+    }
+}
 
 Function Get-BlockChainHeight{
     $uri = 'https://api.mojonode.com/get_blockchain_state'

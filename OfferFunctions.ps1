@@ -2,12 +2,12 @@ Function New-Offer{
     param(
         [CmdletBinding()]
         [Parameter(mandatory=$true)]
-        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX")]
+        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX","HOA")]
         [string]$offered_coin,
         [Parameter(mandatory=$true)]
         [decimal]$offered_amount,
         [Parameter(mandatory=$true)]
-        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX")]
+        [ValidateSet("XCH","wUSDC","wUSDC.b","wUSDT","wmilliETH","wmilliETH.b","DBX","HOA")]
         [string]$requested_coin,
         [Parameter(mandatory=$true)]
         [decimal]$requested_amount
@@ -26,7 +26,7 @@ Function New-Offer{
     }
     #$offer.addTimeInMinutes(30)
 
-    $offer.setMaxHeight(((Get-BlockChainHeight).height + ([int]$config.max_blocks)))
+    $offer.setMaxHeight(((Get-WalletHeight) + ([int]$config.max_blocks)))
     $offer.validateonly()
     $offer.createoffer()
     start-sleep 1
@@ -54,7 +54,6 @@ Function Create-CoinArray{
         $coins.($item.name).id = $item.id
     }
     return $coins
-
 } 
 Function Get-WalletIDs{
     $data = (chia rpc wallet get_wallets | convertfrom-json).wallets 

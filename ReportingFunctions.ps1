@@ -177,7 +177,12 @@ Function Get-DexiePairData{
 
 }
 
-Function Get-DBXPrice{
+Function Get-CATPrice{
+    param(
+        [string]$cat
+    )
+    
+    $ticker = -join($cat,'_XCH')
     $price = @{
         bid = 0
         buy = 0
@@ -186,18 +191,20 @@ Function Get-DBXPrice{
         
     }
 
-    $data = Get-DexiePairData -ticker_id DBX_XCH
+    $data = Get-DexiePairData -ticker_id $ticker
     
     $bid = [Math]::round((1/$data.bid),3)
     $ask = [Math]::round((1/$data.ask),3)
     $mid = [Math]::round((1/$data.current_avg_price),3)
 
-    $delta = [Math]::round(($bid - $ask) / 3)
+    $delta = [Math]::round(($bid - $ask) / 3,3)
 
     $price.sell = [decimal]($mid - $delta)
     $price.buy = [decimal]($mid + $delta)
     $price.bid = [decimal]$data.bid
     $price.ask = [decimal]$data.ask
+    $price.data = $data
 
     $price
 }
+
