@@ -23,6 +23,7 @@ if($null -eq $mod){
         . .\ReportingFunctions.ps1
         . .\TradeingFunctions.ps1
         . .\AmmFunctions.ps1
+        . .\tibet.ps1
         
     
     }
@@ -54,6 +55,7 @@ if($null -eq $mod){
         . .\ReportingFunctions.ps1
         . .\TradeingFunctions.ps1
         . .\AmmFunctions.ps1
+        . .\tibet.ps1
     }
 
 }

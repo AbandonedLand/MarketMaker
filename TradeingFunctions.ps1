@@ -361,10 +361,10 @@ Function Buy-DBX{
 
             #get the tibet quick sale price
             
-    
-            $price = ([Math]::Round((Sell-Token -cat dbx -amount $amount).amount_out,3)-0.005)
+            $dbx_per_xch = (Get-CATPrice -cat DBX).buy
 
-            $dbx_per_xch = (1/($price / $amount))
+            $price = [System.Math]::round($amount / $dbx_per_xch ,3)
+
             if($dbx_per_xch -ge $config.max_dbx_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_dbx_to_xch_buy_price){
                 $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin DBX -requested_amount $amount")
                 start-job -InitializationScript $function -ScriptBlock $scriptblock
@@ -437,12 +437,11 @@ Function Buy-HOA{
 
         if($amount -gt 0){
 
+            $hoa_per_xch = (Get-CATPrice -cat HOA).buy
+
+            $price = [System.Math]::round($amount / $hoa_per_xch ,3)
             #get the tibet quick sale price
             
-    
-            $price = ([Math]::Round((Sell-Token -cat hoa -amount $amount).amount_out,3)-0.005)
-
-            $hoa_per_xch = (1/($price / $amount))
             if($hoa_per_xch -ge $config.max_hoa_to_xch_sell_price -AND $dbx_per_xch -lt $config.min_hoa_to_xch_buy_price){
                 $scriptblock = [scriptblock]::create("New-Offer -offered_coin XCH -offered_amount $price -requested_coin HOA -requested_amount $amount")
                 start-job -InitializationScript $function -ScriptBlock $scriptblock
