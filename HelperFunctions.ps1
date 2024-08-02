@@ -122,7 +122,9 @@ Function Get-WalletSnapShot {
         milliETH_value = ([System.Math]::Round((($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)*$coin_prices.millieth),2))
         DBX_amount = ([System.Math]::Round($wallets.DBX,3))
         DBX_value = ([System.Math]::Round(($wallets.DBX * $coin_prices.dbx),2))
-        total_value = ([System.Math]::Round([System.Math]::Round((($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)*$coin_prices.millieth),2)+($wallets.wUSDC.Base + $wallets.wUSDC.Etherium)+([System.Math]::Round(($wallets.XCH * $coin_prices.xch),2)),2)+([System.Math]::Round(($wallets.DBX * $coin_prices.dbx),2)))
+        HOA_amount = ([System.Math]::Round($wallets.HOA,3))
+        HOA_value = ([System.Math]::Round(($wallets.HOA * $coin_prices.hoa),2))
+        total_value = ([System.Math]::Round([System.Math]::Round((($wallets.wmilliETH.Base + $wallets.wmilliETH.Etherium)*$coin_prices.millieth),2)+($wallets.wUSDC.Base + $wallets.wUSDC.Etherium)+([System.Math]::Round(($wallets.XCH * $coin_prices.xch),2)),2)+([System.Math]::Round(($wallets.DBX * $coin_prices.dbx),2))+([System.Math]::Round(($wallets.HOA * $coin_prices.hoa),2)))
         snapshot_time = (Get-Date)
     }
 
