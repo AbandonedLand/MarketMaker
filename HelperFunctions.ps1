@@ -191,7 +191,7 @@ Function Check-Offers{
 }
 
 
-Get-WalletHeight{
+Function Get-WalletHeight{
     $height = (chia rpc wallet get_height_info | ConvertFrom-Json)
     if($height){
         return $height.height
