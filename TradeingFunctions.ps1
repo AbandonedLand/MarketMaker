@@ -460,8 +460,8 @@ Function Sell-HOA{
 
 
     #Figure out how much to sell
-    if([decimal]$wallets.HOA -gt 5000){
-        $amount = 5000
+    if([decimal]$wallets.HOA -gt $config.hoa_max_exposure){
+        $amount = $config.hoa_max_exposure
     } else {
         $amount = [decimal]$wallets.HOA
     }
@@ -478,7 +478,6 @@ Function Sell-HOA{
         }
     }
 
-   
 
 }
 
