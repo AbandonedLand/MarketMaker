@@ -82,6 +82,33 @@ Function Show-WalletBalanceHistory {
 }
 
 
+Function Get-DexieIncentives { 
+    $uri = 'https://dexie.space/v1/rewards/claims?page_size=2000'
+    $data = Invoke-RestMethod -Method Get -Uri $uri
+    $incentive = @{
+        dbx = 0
+        hoa = 0
+        data = @()
+    }
+    $last_day = (Get-Date).AddHours(-24)
+    foreach ($offer in $data.claims){
+        if(($offer.maker_puzzle_hash -eq '72fcdff279a0650d375601f863d917ddbeacf62cb8bc43e80d5e441e23790af9' -or $offer.maker_puzzle_hash -eq '2632cc9d9333f16c84c862d2f94cca8ee9f2379bbb0c08585f0dcd0e8d6e2684' -or $offer.maker_puzzle_hash -eq '2632cc9d9333f16c84c862d2f94cca8ee9f2379bbb0c08585f0dcd0e8d6e2684') -AND $offer.date_claimed -gt $last_day){
+            $incentive.data += @{
+                date_claimed = $offer.date_claimed
+                code = $offer.claimed_rewards.code
+                amount = $offer.claimed_rewards.amount
+            }
+            if($offer.claimed_rewards.code -eq 'DBX'){
+                $incentive.dbx = $incentive.dbx + $offer.claimed_rewards.amount
+            }
+            if($offer.claimed_rewards.code -eq 'HOA'){
+                $incentive.hoa = $incentive.hoa + $offer.claimed_rewards.amount
+            }
+        }
+    }
+    return $incentive
+}
+
 Function Convert-CodeToUSD($code,$amount){
     [decimal]$code_usd_value = 0
     $prices = Get-CoinPrice
