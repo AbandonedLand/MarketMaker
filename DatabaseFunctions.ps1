@@ -74,6 +74,18 @@ Function Set-WalletSnapShot{
     Invoke-SqliteQuery -DataSource (Get-DatabaseConfig).database -Query $Query -SqlParameters $sqlparam
 }
 
+Function Add-LiquidityRewardToTrade{
+    param(
+        $dexie_id,
+        $liquidity_coin,
+        $liquidity_amount
+    )
+
+    $query = -join("Update TRADES set liquidity_coin = ",$liquidity_coin,", liquidity_amount = ",$liquidity_amount," where dexie_id = ",$dexie_id)
+    Invoke-sqliteQuery -Query $Query -Database (Get-DatabaseConfig).database
+
+}
+
 Function Create-XCHTradeLogDatabase{
 
     $Query = "CREATE TABLE TRADES (trade_id VARCHAR(100) PRIMARY KEY, dexie_id VARCHAR(100), status VARCHAR(20), expired_block BIGINT, offered_coin VARCHAR(20), offered_amount DECIMAL(10,3), requested_coin VARCHAR(20), requested_amount DECIMAL(10,3), liquidity_coin VARCHAR(20), liquidity_amount DECIMAL(10,3))"
