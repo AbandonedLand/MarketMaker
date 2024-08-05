@@ -1,12 +1,3 @@
-Function Create-DatabaseTable{
-    param(
-        [string]$name,
-        [hashtable]$columns
-    )
-
-
-    
-}
 
 
 Function Get-CompletedOffers{
@@ -85,50 +76,16 @@ Function Set-WalletSnapShot{
 
 Function Create-XCHTradeLogDatabase{
 
-    $Query = "CREATE TABLE TRADES (trade_id VARCHAR(100) PRIMARY KEY, dexie_id VARCHAR(100), status VARCHAR(20), expired_block BIGINT, offered_coin VARCHAR(20), offered_amount DECIMAL(10,3), requested_coin VARCHAR(20), requested_amount DECIMAL(10,3))"
+    $Query = "CREATE TABLE TRADES (trade_id VARCHAR(100) PRIMARY KEY, dexie_id VARCHAR(100), status VARCHAR(20), expired_block BIGINT, offered_coin VARCHAR(20), offered_amount DECIMAL(10,3), requested_coin VARCHAR(20), requested_amount DECIMAL(10,3), liquidity_coin VARCHAR(20), liquidity_amount DECIMAL(10,3))"
     Invoke-sqliteQuery -Query $Query -Database (Get-DatabaseConfig).database
-    $Query = "CREATE TABLE WALLET (id INTEGER PRIMARY KEY, xch_amount DECIMAL(10,3), xch_value DECIMAL(10,3), wUSD_amount DECIMAL(10,3), wUSD_value DECIMAL(10,3), milliETH_amount DECIMAL(10,3), milliETH_value DECIMAL(10,3), total_value DECIMAL(10,3), snapshot_time DEFAULT CURRENT_TIMESTAMP )"
+    $Query = "CREATE TABLE WALLET (id INTEGER PRIMARY KEY, xch_amount DECIMAL(10,3), xch_value DECIMAL(10,3), wUSD_amount DECIMAL(10,3), wUSD_value DECIMAL(10,3), milliETH_amount DECIMAL(10,3), milliETH_value DECIMAL(10,3), total_value DECIMAL(10,3), DBX_amount DECIMAL(10,3), DBX_value DECIMAL(10,3), HOA_amount DECIMAL(10,3), HOA_value DECIMAL(10,3), snapshot_time DEFAULT CURRENT_TIMESTAMP )"
     Invoke-sqliteQuery -Query $Query -Database (Get-DatabaseConfig).database
-    $Query = "CREATE TABLE COINPRICE (id INTEGER PRIMARY KEY, xch DECIMAL(10,3), millieth DECIMAL(10,3), created_at DEFAULT CURRENT_TIMESTAMP)"
+    $Query = "CREATE TABLE COINPRICE (id INTEGER PRIMARY KEY, xch DECIMAL(10,3), millieth DECIMAL(10,3), dbx DECIMAL(20,17), hoa DECIMAL(20,17), created_at DEFAULT CURRENT_TIMESTAMP)"
     Invoke-sqliteQuery -Query $Query -Database (Get-DatabaseConfig).database
 }
 
 Function Get-DatabaseConfig{
     return $config
-}
-
-Function Update-DBForDBXTracking{
-    $coinprice_query = "ALTER TABLE COINPRICE ADD dbx DECIMAL(20,17)"
-
-    $wallet_query = "ALTER TABLE WALLET ADD DBX_amount DECIMAL(10,3)"
-    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
-    $wallet_query = "ALTER TABLE WALLET ADD DBX_value DECIMAL(10,3)"
-    Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
-    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
-
-}
-
-Function Update-DBForHOATracking{
-    $coinprice_query = "ALTER TABLE COINPRICE ADD hoa DECIMAL(20,17)"
-    Invoke-sqliteQuery -Query $coinprice_query -Database (Get-DatabaseConfig).database
-    $wallet_query = "ALTER TABLE WALLET ADD HOA_amount DECIMAL(10,3)"
-    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
-    $wallet_query = "ALTER TABLE WALLET ADD HOA_value DECIMAL(10,3)"
-    
-    Invoke-sqliteQuery -Query $wallet_query -Database (Get-DatabaseConfig).database
-
-}
-
-
-Function New-AMMDatabase{
-    <#  
-        .SYNOPSIS
-        Creates a new database file for the AMM
-
-        .DESCRIPTION
-
-        
-    #>
 }
 
 
