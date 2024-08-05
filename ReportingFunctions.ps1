@@ -15,7 +15,7 @@ Function New-TradeReport {
         bought = [PSCustomObject][ordered]@{
             amount = $bought_amount
             value = [System.Math]::Round($bought_value)
-            avg = [System.Math]::Round($bought_value/$bought_amount)
+            avg = [System.Math]::Round($bought_value/$bought_amount,2)
         }
     }
 
