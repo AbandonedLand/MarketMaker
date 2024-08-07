@@ -116,16 +116,18 @@ Function Sell-XCHinBulk{
         $wallets
     )
 
-    
+    $ppc = $starting_price
+    $amount = $step_size
+
     if($chain -eq 'Base'){
         $max = round(($wallets.XCH * ($max_percent_of_offered_coin /100)))
     }
     if($chain -eq 'Etherium'){
+        $ppc = $ppc + 0.3
         $max = round(($wallets.XCH * ($max_percent_of_offered_coin /100)))
     }
       
-    $ppc = $starting_price
-    $amount = $step_size
+    
 
     while(($amount) -le $max){
         if($chain -eq 'Base'){
