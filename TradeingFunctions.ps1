@@ -123,7 +123,7 @@ Function Sell-XCHinBulk{
         $max = round(($wallets.XCH * ($max_percent_of_offered_coin /100)))
     }
     if($chain -eq 'Etherium'){
-        $ppc = $ppc + 0.3
+        $ppc = $ppc + $config.xch_eth_premium
         $max = round(($wallets.XCH * ($max_percent_of_offered_coin /100)))
     }
       

@@ -52,6 +52,7 @@ $config = @{
     xch_spread = 0.2
     xch_extra_sale_adjustment = 0
 
+    xch_eth_premium = 0.45
     # Same as xch_spread, but for millieth offers.
     millieth_spread = 0.05
 
