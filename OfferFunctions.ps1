@@ -25,8 +25,13 @@ Function New-Offer{
         $offer.requested($requested_coin,$requested_amount)
     }
     #$offer.addTimeInMinutes(30)
-
-    $offer.setMaxHeight(((Get-WalletHeight) + ([int]$config.max_blocks)))
+    if($this.offered_coin -eq 'HOA' -or $this.requested_coin -eq 'HOA' -or $this.requested_coin -eq 'DBX' -or $this.offered_coin -eq 'DBX'){
+        #increase the time between hoa and dbx offers
+        $offer.setMaxHeight((Get-WalletHeight) + 200 )    
+    } else {
+        $offer.setMaxHeight(((Get-WalletHeight) + ([int]$config.max_blocks)))
+    }
+    
     $offer.validateonly()
     $offer.createoffer()
     start-sleep 1

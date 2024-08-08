@@ -93,6 +93,11 @@ $config = @{
     max_hoa_to_xch_sell_price = 4100
 
 
-
+    dacs = @(
+        'nft_id'
+        )
+    dac_price = 475
+        
+    
 
 }

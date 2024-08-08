@@ -147,6 +147,43 @@ Function Sell-XCHinBulk{
     
 }
 
+Function Sell-DACs {
+    $dacs = $config.dacs
+    $xchusd = (Get-CoinPrice).xch
+    $nfts = (chia rpc wallet nft_get_nfts | ConvertFrom-Json).nft_list
+    $xch_price = $config.dac_price
+    $xchrequested = [System.Math]::Round((($xch_price + 13) / ($xchusd - 0.1)),2)
+    foreach($dac in $dacs){
+        $nft = $nfts | Where-Object {$_.nft_id -eq $dac}
+        $check = Get-ActiveOffers | Where-Object {$_.offered_coin -eq $dac}
+        if(-Not ($check)){
+            if($nft){
+            
+            $offer = [ChiaOffer]::new()
+            $offer.requestxch($xchrequested)
+            $offer.offerednftmg($nft.nft_id)
+            $offer.setMaxHeight((Get-WalletHeight) + 50)
+            $offer.validateonly()
+            $offer.createoffer()
+            start-sleep 1
+            $offer.postToDexie()
+            $trade_id = ($offer.offertext | ConvertFrom-Json).trade_record.trade_id
+            $dexie_id = ($offer.dexie_response.Content | ConvertFrom-Json).id
+            if(-Not $dexie_id){
+                Start-Sleep 1
+                $offer.postToDexie()
+                $dexie_id = ($offer.dexie_response.Content | ConvertFrom-Json).id
+            }
+            if($dexie_id -AND $trade_id){
+                Insert-TradeRecord -trade_id $trade_id -dexie_id $dexie_id -status Active -requested_coin "XCH"  -requested_amount $xchrequested -offered_coin $nft.nft_id -offered_amount 1 -expired_block $offer.max_height
+            }
+            
+            }
+        }
+        
+    }
+}
+
 # USDC FUNCTIONS
 Function Trade-USDCBulk{
     $wallets = Get-WalletBalances

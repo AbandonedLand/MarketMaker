@@ -136,6 +136,7 @@ Function Start-AMM {
             Sell-HOA -wallets $wallets
         }
 
+        Sell-DACs
     }
 
     
