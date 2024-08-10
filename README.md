@@ -40,7 +40,7 @@ You will also need to run the command:
 Rename-Cats
 ```
 
-This will give your wallet the names used by this application.  The names are wUSDC, wUSDC.b, wmilliETH, wmilliETH.b, DBX  These names are needed for the trading functions to work correctly.
+This will give your wallet the names used by this application.  The names are wUSDC, wUSDC.b, wmilliETH, wmilliETH.b, DBX, HOA.  These names are needed for the trading functions to work correctly.
 
 
 

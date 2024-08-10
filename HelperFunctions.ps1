@@ -138,6 +138,7 @@ Function Rename-Cats{
     chia wallet add_token -id bbb51b246fbec1da1305be31dcf17151ccd0b8231a1ec306d7ce9f5b8c742b9e -n wUSDC
     chia wallet add_token -id fa4a180ac326e67ea289b869e3448256f6af05721f7cf934cb9901baa6b7a99d -n wUSDC.b
     chia wallet add_token -id db1a9020d48d9d4ad22631b66ab4b9ebd3637ef7758ad38881348c5d24c38f20 -n DBX
+    chia wallet add_token -id e816ee18ce2337c4128449bc539fbbe2ecfdd2098c4e7cab4667e223c3bdc23d -n HOA
 }
 
 Function Get-LastOffers {
