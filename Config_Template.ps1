@@ -14,6 +14,10 @@ $config = @{
     trading_pair_xch_usdcb = $true
     trading_pair_usdc_millieth = $true
     trading_pair_usdcb_milliethb = $true
+    trading_pair_hoa_xch = $true
+    trading_pair_dbx_xch = $true
+    trade_dacs = $false
+
 
 
 

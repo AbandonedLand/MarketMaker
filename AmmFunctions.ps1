@@ -113,30 +113,36 @@ Function Start-AMM {
 
         }
         
+        if([Boolean]$config.trading_pair_dbx_xch){
+            $check = ($active | Where-Object {$_.offered_coin -eq 'XCH' -AND $_.requested_coin -eq 'DBX'})
 
-        $check = ($active | Where-Object {$_.offered_coin -eq 'XCH' -AND $_.requested_coin -eq 'DBX'})
+            if($check.count -eq 0){
+                Buy-DBX -wallets $wallets
+            }
 
-        if($check.count -eq 0){
-            Buy-DBX -wallets $wallets
+            $check = ($active | Where-Object {$_.offered_coin -eq 'DBX' -AND $_.requested_coin -eq 'XCH'})
+            if($check.count -eq 0){
+                Sell-DBX -wallets $wallets
+            }
         }
+        
+        if([Boolean]$config.trading_pair_hoa_xch) {
+            $check = ($active | Where-Object {$_.offered_coin -eq 'XCH' -AND $_.requested_coin -eq 'HOA'})
 
-        $check = ($active | Where-Object {$_.offered_coin -eq 'XCH' -AND $_.requested_coin -eq 'HOA'})
+            if($check.count -eq 0){
+                Buy-HOA -wallets $wallets
+            }
 
-        if($check.count -eq 0){
-            Buy-HOA -wallets $wallets
+            $check = ($active | Where-Object {$_.offered_coin -eq 'HOA' -AND $_.requested_coin -eq 'XCH'})
+            if($check.count -eq 0){
+                Sell-HOA -wallets $wallets
+            }
         }
+            
 
-        $check = ($active | Where-Object {$_.offered_coin -eq 'DBX' -AND $_.requested_coin -eq 'XCH'})
-        if($check.count -eq 0){
-            Sell-DBX -wallets $wallets
+        if([Boolean]$config.trade_dacs) {
+            Sell-DACs
         }
-
-        $check = ($active | Where-Object {$_.offered_coin -eq 'HOA' -AND $_.requested_coin -eq 'XCH'})
-        if($check.count -eq 0){
-            Sell-HOA -wallets $wallets
-        }
-
-        Sell-DACs
     }
 
     
