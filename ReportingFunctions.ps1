@@ -224,10 +224,11 @@ Function Get-CATPrice{
     $ask = [Math]::round((1/$data.ask),3)
     $mid = [Math]::round((1/$data.current_avg_price),3)
 
-    $delta = [Math]::round(($bid - $ask) / 3,3)
+    # Percent below/above current bid/ask
+    $delta = 1.035
 
-    $price.sell = [decimal]($mid - $delta)
-    $price.buy = [decimal]($mid + $delta)
+    $price.sell = [Math]::Round([decimal]($ask / $delta),3)
+    $price.buy = [Math]::round([decimal]($bid * $delta),3)
     $price.bid = [decimal]$data.bid
     $price.ask = [decimal]$data.ask
     $price.data = $data
