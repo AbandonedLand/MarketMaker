@@ -77,21 +77,21 @@ Function Get-LFromDeltaX($price,$lower_price,$upper_price,$xch_amount){
 
 Class UniSwapV3 {
     [uint128]$p     # Current Price in usd
-    
-    $pb    # Upper Price
-    $pa    # Lower Price
+    [uint128]$stepy # minimum liquidity between between ticks (selling Y amount of XCH per price change)
+    $pb    # Lower Price
+    $pa    # Upper Price
     [uint128]$x
     [uint128]$y
-    [int64]$l
+    [int]$l
     [int64]$ly
     [int64]$lx
     [uint128]$xv
     [uint128]$xr
     [uint128]$yv
     [uint128]$yr 
-    [uint128]$l2
-    [int64]$dy      # Delta Y (Change in amount of XCH)
-    [int64]$dx    # Delta X (Change in USD)
+    [int128]$l2
+    [int64]$dy      # Delta Y (Change in amount of USD)
+    [int64]$dx    # Delta X (Change in XCH)
     $tick
     [UInt128]$ydecimal = 1000000000000
     [UInt128]$xdecimal = 1000
@@ -108,7 +108,7 @@ Class UniSwapV3 {
         $this.pb = $upper_price
         $this.pa = $lower_price
         $this.dy = $xch_amount
-        $this.setly()
+        $this.setlx()
         $this.ly   
         $this.setxv($this.ly)
         $this.xv
@@ -118,6 +118,7 @@ Class UniSwapV3 {
         $this.yv
         $this.setyr($this.ly)
         $this.yr
+
 
     }
 
@@ -135,7 +136,9 @@ Class UniSwapV3 {
     }
 
     setlx(){
-
+        $xxx = (1/$this.sqrt($this.pa) - (1/$this.sqrt($this.pb)))
+        $this.ly = $this.dy / $xxx
+        $this.l2 = $this.ly * $this.ly
     }
 
     [uint128]calcdy($upper,$lower,$l){
@@ -146,10 +149,29 @@ Class UniSwapV3 {
         Return (([Decimal]::round($l/([math]::sqrt($lower)),28)) - ([Decimal]::round($l/([math]::sqrt($upper)),28)))
      }
 
-    getXtokens(){
+    [hashtable]pricemap(){
 
+        $localy = 0
+
+        while($localy -lt $this.yr){
+
+            $localy += $this.stepy
+        }
+
+        $pricemap = @{}
+
+        return $pricemap
     }
-    
+
+    [int32]getPriceAtYr($yreal){
+        $k = $this.ly*$this.ly
+        $price = $k
+        [int32]$xl = ($this.yv + $yreal)/($this.xv+$this.xr)
+
+        $k / $xl
+
+        return $price
+    }
 
 
     setxv($l){
@@ -198,3 +220,14 @@ Class UniSwapV3 {
 
 $uni = [UniSwapV3]::new(30000000000000,14000,12500,15500) 
 # (Xr + $Xv) * (0 + $Yv) = L2
+
+$uni.l2 = $uni.ly*$uni.ly
+$x = $uni.xv
+$y1 = $uni.yv+$uni.yr
+$y1/$x
+# Sell .25 XCH
+$xr = 250000000000
+$x = $uni.xv + $xr
+$y2 = $uni.l2 / $x
+$y2/$x
+
