@@ -96,6 +96,7 @@ Class UniSwapV3 {
     [UInt128]$ydecimal = 1000000000000
     [UInt128]$xdecimal = 1000
     [uint128]$pricedecimal 
+    [hashtable]$table
 
 
     UniSwapV3(){
@@ -112,12 +113,14 @@ Class UniSwapV3 {
         $this.ly   
         $this.setxv($this.ly)
         $this.xv
-        $this.setxr($this.ly)
+        #$this.setxr($this.ly)
+        $this.xr = 0
         $this.xr
         $this.setyv($this.ly)
         $this.yv
         $this.setyr($this.ly)
         $this.yr
+        
 
 
     }
@@ -206,19 +209,66 @@ Class UniSwapV3 {
 
     [hashtable]sellxch($amount){
 
+        
+        $this.xr = $this.xr+$amount
+        $y2 = $this.l2 / ($this.xv+$this.xr)
+        $tp=$y2/($this.xr+$this.xv)
+        $usd = (($tp*$amount)/$this.ydecimal)
+        $usd_fee = [int64]([math]::round(([decimal]$usd*0.01)))
+        $xch_fee = [int64]([math]::round([decimal]$amount * 0.01))
+        if($amount -gt 0){
+            $offer_coin = "xch"
+            $offer_amount = $amount
+            $requested_coin = "usd"
+            $requested_amount =  $usd + $usd_fee
+        } else {
+            $offer_coin = "usd"
+            $offer_amount = $usd*-1
+            $requested_coin = "xch"
+            $requested_amount =  ($amount + $xch_fee)*-1
+        }
+
 
         $data =@{
-
+            price = $tp
+            xch = $amount
+            total_xch = $this.xr
+            usd = $usd
+            usd_fee = $usd_fee
+            xch_fee = $xch_fee
+            offered_coin = $offer_coin
+            offered_amount = $offer_amount
+            requested_coin = $requested_coin
+            requested_amount = $requested_amount
         }
+
         return $data
 
     }
+
+    [array]buildtable($step){
+        $array = @()
+        $thisxr = $this.dy
+        $txr = 0
+
+        while($txr -lt $thisxr){
+
+            $data = $this.sellxch($step)
+            $txr = $data.total_xch
+            $array += $data
+        }
+
+        return $array
+    }
+
 
 }
 
 
 
 $uni = [UniSwapV3]::new(30000000000000,14000,12500,15500) 
+
+
 # (Xr + $Xv) * (0 + $Yv) = L2
 
 $uni.l2 = $uni.ly*$uni.ly
